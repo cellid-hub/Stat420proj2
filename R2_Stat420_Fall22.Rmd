@@ -1,6 +1,6 @@
 ---
 title: "MLEs: Variance, Bias, and Risk"
-author: " Your Name and id"
+author: "Nathan Poteet, Dylan Celli, Matthew Foulk"
 output:
   pdf_document:
     toc: yes
