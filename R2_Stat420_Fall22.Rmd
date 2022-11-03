@@ -57,24 +57,31 @@ mean-10)
 
 ```{r}
 #thetas <- c(theta1(8),theta2(8),theta3(8))
-empirical_results = c(0,0,0,0)
-mean_list <- c(0,0,0,0)
-var_list <- c(0,0,0,0)
-bias_list <- c(0,0,0,0)
+empirical_results = list()
 
 #Theta1
-empirical_results[1] <- replicate(100000,theta1(8))
+empirical_results <- append(empirical_results, 
+                            list(replicate(100000,theta1(8))))
 #theta2
-empirical_results[2] <- replicate(100000,theta2(8))
+empirical_results <- append(empirical_results, 
+                            list(replicate(100000,theta2(8))))
 #theta3
-empirical_results[3] <- replicate(100000,theta3(8))
+empirical_results <- append(empirical_results, 
+                            list(replicate(100000,theta3(8))))
 #theta4
-empirical_results[4] <- replicate(100000,theta4(8))
+empirical_results <- append(empirical_results, 
+                            list(replicate(100000,theta4(8))))
 
-for i in c(1,2,3,4){
-  mean_list[i] <- mean(empirical_results)
-  var_list[i] <- var(empirical_results)
-  bias_list[i] <- empirical_mean-10
+for (i in c(1,2,3,4)){
+  mean <- mean(empirical_results[[i]])
+  variance <- var(empirical_results[[i]])
+  bias <- mean - 10
+  
+  print("======================")
+  print(paste("Theta",i,""))
+  print(paste("Mean: ", mean))
+  print(paste("Variance: ", variance))
+  print(paste("Bias: ", bias ))
 }
 
 
