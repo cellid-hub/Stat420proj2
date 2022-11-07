@@ -31,7 +31,7 @@ $N(\mu = 10, \sigma^2=4)$, and output the value of each of the four
 estimators above on this sample.
 
 ```{r}
-#Theta in each case is an estimatore for mu^2
+#Theta in each case is an estimator for mu^2
 theta1 <-function(n) {
   theta <- mean(rnorm(n,mean = 10, sd = 2))^2
 }
@@ -173,6 +173,43 @@ functions of the given estimators in a single plot. That is plot MSE vs
 $\sigma^2$.
 
 ```{r}
+x1 = vector()
+y1 = vector()
+for (i in 0:50){
+  statistic <- var(rnorm(8, mean = 10, sd = sqrt(i)))
+  b = (statistic - i)^2
+  mse = 2*i^4/(8-1) + b
+  x1 <- append(x1, i)
+  y1 <- append(y1, mse)
+}
+
+x2 = vector()
+y2 = vector()
+for (i in 0:50){
+  statistic <- ((8-1)/8)*var(rnorm(8, mean = 10, sd = sqrt(i)))
+  b = (statistic - i)^2
+  mse = ((8-1)^2 / 8^2)*(2*i^4/(8-1)) + b
+  x2 <- append(x2, i)
+  y2 <- append(y2, mse)
+}
+
+x3 = vector()
+y3 = vector()
+for (i in 0:50){
+  statistic <- ((8-1)/(8+1))*var(rnorm(8, mean = 10, sd = sqrt(i)))
+  b = (statistic - i)^2
+  mse = ((8-1)^2 / (8+1)^2)*(2*i^4/(8-1)) + b
+  x3 <- append(x3, i)
+  y3 <- append(y3, mse)
+}
+
+plot(x1,y1,ylim=range(c(y1,y2,y3)),xlim=range(c(x1,x2,x3)), type="l",col="red",xlab="sigma^2",ylab="MSE")
+lines(x2,y2,col="green")
+lines(x3,y3,col="blue")
+legend(x='topleft',legend=c("theta_1", "theta_2", "theta_3"), col=c("red","green","blue"), lty=1)
+
+
+
 
 ```
 
@@ -182,5 +219,39 @@ error functions of the three estimators in a single plot. That is plot
 MSE vs $n$ (the sample size).
 
 ```{r}
+x1 = vector()
+y1 = vector()
+for (i in 2:200){
+  statistic <- var(rnorm(i, mean = 10, sd = 2))
+  b = (statistic - 4)^2
+  mse = 2*2^4/(i-1) + b
+  x1 <- append(x1, i)
+  y1 <- append(y1, mse)
+}
+
+x2 = vector()
+y2 = vector()
+for (i in 2:200){
+  statistic <- ((i-1)/i)*var(rnorm(i, mean = 10, sd = 2))
+  b = (statistic - 4)^2
+  mse = ((i-1)^2 / i^2)*(2*2^4/(i-1)) + b
+  x2 <- append(x2, i)
+  y2 <- append(y2, mse)
+}
+
+x3 = vector()
+y3 = vector()
+for (i in 2:200){
+  statistic <- ((i-1)/(i+1))*var(rnorm(i, mean = 10, sd = 2))
+  b = (statistic - 4)^2
+  mse = ((i-1)^2 / (i+1)^2)*(2*2^4/(i-1)) + b
+  x3 <- append(x3, i)
+  y3 <- append(y3, mse)
+}
+
+plot(x1,y1,ylim=range(c(y1,y2,y3)),xlim=range(c(x1,x2,x3)), lwd=1.2,type="l",col="red",xlab="n",ylab="MSE")
+lines(x2,y2,col="green")
+lines(x3,y3,col="blue")
+legend(x='topright',legend=c("theta_1", "theta_2", "theta_3"), col=c("red","green","blue"), lty=1)
 
 ```
