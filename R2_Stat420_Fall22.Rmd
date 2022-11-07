@@ -97,27 +97,57 @@ Write four functions that calculate the MSE's of the given estimators
 taking input $\mu$, $\sigma^2$, and $n$.
 
 ```{r}
-
+MSE1 <-function(mu,variance,n) {
+  MSE <- variance/n + (mean(empirical_results[i])-mu)^2
+}
+MSE2 <-function(mu,variance,n) {
+  MSE <- variance/n + (mean(empirical_results[i])-mu)^2
+}
+MSE3 <-function(mu,variance,n) {
+  MSE <- variance/n + (mean(empirical_results[i])-mu)^2
+}
+MSE4 <-function(mu,variance,n) {
+  MSE <- variance/n + (mean(empirical_results[i])-mu)^2
+}
 ```
 
 For fixed value of $n=8$ and $\sigma^2 = 4$, and for different values of
 $\mu^2 \in [70, 140]$, plot the graphs for the four mean square error
-functions in a single plot. Thats is plot MSE vs $\mu^2$.
+functions in a single plot. That is plot MSE vs $\mu^2$.
 
 ```{r}
+rand_mu <- runif(4,min=70,max=140)
+mse <- c()
+mse <- append(mse,MSE1(rand_mu[1],4,8))
+mse <- append(mse,MSE2(rand_mu[2],4,8))
+mse <- append(mse,MSE3(rand_mu[3],4,8))
+mse <- append(mse,MSE4(rand_mu[4],4,8))
 
+qqplot(rand_mu,mse)
 ```
 
 For fixed value of $\mu=10$ and $\sigma^2 = 4$, and for different values
 of $n \in \{1, 2, 3, 4, \dots 200\}$, plot the graphs for the four mean
-square error functions in a single plot. Thats is plot MSE vs $n$ (the
+square error functions in a single plot. That is plot MSE vs $n$ (the
 sample size).
 
 ```{r}
+rand_mu <- runif(4,min=70,max=140)
+rand_n <- runif(4,min=0,max=200)
+mse <- c()
 
+mse <- append(mse,MSE1(rand_mu[1],4,rand_n[i]))
+mse <- append(mse,MSE2(rand_mu[2],4,rand_n[i]))
+mse <- append(mse,MSE3(rand_mu[3],4,rand_n[i]))
+mse <- append(mse,MSE4(rand_mu[4],4,rand_n[i]))
+
+qqplot(rand_n,mse)
 ```
 
 What can you conclude?
+
+Based on these plots I can conclude that as the population mean and
+sample size increase the MSE increases.
 
 ## Fisher Information, Efficiency, Asymptotic Calculations
 
