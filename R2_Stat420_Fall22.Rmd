@@ -56,9 +56,7 @@ when working with a sample of size 8, then calculate the mean, var,
 mean-10)
 
 ```{r}
-#thetas <- c(theta1(8),theta2(8),theta3(8))
 empirical_results = list()
-
 #Theta1
 empirical_results <- append(empirical_results, 
                             list(replicate(100000,theta1(8))))
@@ -75,10 +73,10 @@ empirical_results <- append(empirical_results,
 for (i in c(1,2,3,4)){
   mean <- mean(empirical_results[[i]])
   variance <- var(empirical_results[[i]])
-  bias <- mean - 10
+  bias <- (mean - 10)#^2 Do we need to square the bias here?
   
   print("======================")
-  print(paste("Theta",i,""))
+  print(paste("Theta",i))
   print(paste("Mean: ", mean))
   print(paste("Variance: ", variance))
   print(paste("Bias: ", bias ))
@@ -91,23 +89,23 @@ Verify that
 $$ \text{MSE}_{\text{emp}} \thickapprox \text{Var}_{\text{emp}} + (\text{Bias}_\text{emp})^2$$
 
 It is possible to calculate the exact theoretical MSE of the four
-estimators defined above as functions of $\mu$, $\sigma^2$ and $n$. \\
+estimators defined above as functions of $\mu$, $\sigma^2$ and $n$.
 
 Write four functions that calculate the MSE's of the given estimators
 taking input $\mu$, $\sigma^2$, and $n$.
 
 ```{r}
 MSE1 <-function(mu,variance,n) {
-  MSE <- variance/n + (mean(empirical_results[i])-mu)^2
+  MSE <- (4*variance*mu^2)/n + 3*variance/n^2
 }
 MSE2 <-function(mu,variance,n) {
-  MSE <- variance/n + (mean(empirical_results[i])-mu)^2
+  MSE <- (4*variance*mu^2)/n + (2*variance^4)/n^2
 }
 MSE3 <-function(mu,variance,n) {
-  MSE <- variance/n + (mean(empirical_results[i])-mu)^2
+  MSE <- (4*variance*mu^2)/n + (2*variance^2)/n^2 + (2*variance^2)/(n^2*(n-1))
 }
 MSE4 <-function(mu,variance,n) {
-  MSE <- variance/n + (mean(empirical_results[i])-mu)^2
+  MSE <- variance/n + (mean(empirical_results[[4]])-mu)^2
 }
 ```
 
@@ -116,14 +114,21 @@ $\mu^2 \in [70, 140]$, plot the graphs for the four mean square error
 functions in a single plot. That is plot MSE vs $\mu^2$.
 
 ```{r}
-rand_mu <- runif(4,min=70,max=140)
-mse <- c()
-mse <- append(mse,MSE1(rand_mu[1],4,8))
-mse <- append(mse,MSE2(rand_mu[2],4,8))
-mse <- append(mse,MSE3(rand_mu[3],4,8))
-mse <- append(mse,MSE4(rand_mu[4],4,8))
-
-qqplot(rand_mu,mse)
+mse1_plot <- list()
+mse2_plot <- list()
+mse3_plot <- list()
+mse4_plot <- list()
+for (i in list(70:140)){
+  mse1_plot <- append(mse,MSE1(i,4,8))
+  mse2_plot <- append(mse,MSE2(i,4,8))
+  mse3_plot <- append(mse,MSE3(i,4,8))
+  mse4_plot <- append(mse,MSE4(i,4,8))
+}
+mu <- c(70:140)
+qqplot(mu,mse1_plot)
+qqplot(mu,mse2_plot)
+qqplot(mu,mse3_plot)
+qqplot(mu,mse4_plot)
 ```
 
 For fixed value of $\mu=10$ and $\sigma^2 = 4$, and for different values
@@ -132,16 +137,21 @@ square error functions in a single plot. That is plot MSE vs $n$ (the
 sample size).
 
 ```{r}
-rand_mu <- runif(4,min=70,max=140)
-rand_n <- runif(4,min=0,max=200)
-mse <- c()
-
-mse <- append(mse,MSE1(rand_mu[1],4,rand_n[i]))
-mse <- append(mse,MSE2(rand_mu[2],4,rand_n[i]))
-mse <- append(mse,MSE3(rand_mu[3],4,rand_n[i]))
-mse <- append(mse,MSE4(rand_mu[4],4,rand_n[i]))
-
-qqplot(rand_n,mse)
+mse1_plot <- list()
+mse2_plot <- list()
+mse3_plot <- list()
+mse4_plot <- list()
+for (i in list(1:200)){
+  mse1_plot <- append(mse,MSE1(10,4,i))
+  mse2_plot <- append(mse,MSE2(10,4,i))
+  mse3_plot <- append(mse,MSE3(10,4,i))
+  mse4_plot <- append(mse,MSE4(10,4,i))
+}
+n <- c(1:200)
+qqplot(n,mse1_plot)
+qqplot(n,mse2_plot)
+qqplot(n,mse3_plot)
+qqplot(n,mse4_plot)
 ```
 
 What can you conclude?
