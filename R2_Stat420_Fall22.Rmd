@@ -102,10 +102,10 @@ MSE2 <-function(mu,variance,n) {
   MSE <- (4*variance*mu^2)/n + (2*variance^4)/n^2
 }
 MSE3 <-function(mu,variance,n) {
-  MSE <- (4*variance*mu^2)/n + (2*variance^2)/n^2 + (2*variance^2)/(n^2*(n-1))
+  MSE <- (4*variance*mu^2)/n + (2*variance^2)/n^2 + (2*variance^2)/(n^2)
 }
 MSE4 <-function(mu,variance,n) {
-  MSE <- variance/n + (mean(empirical_results[[4]])-mu)^2
+  MSE <- (variance^4/n^2)*(32/n^2 - 20/n + 11) + (4*variance^2*mu^2)/n
 }
 ```
 
