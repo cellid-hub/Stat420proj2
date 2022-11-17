@@ -22,7 +22,7 @@ $$\hat{\theta}_3 = \overline{X}^2 - \frac{S^2}{n}$$
 $$ \hat{\theta}_4 = \overline{X}^2 - \frac{\left(\frac{n-1}{n}\right)S^2}{n}$$
 Note that $\hat{\theta}_2$ is the mle, $\hat{\theta}_2$,
 $\hat{\theta}_3$ are unbiased estimators, and $\hat{\theta}_4$ is
-constructed using MLEs for both $\mu^2$ and $\sigma^2$. \\
+constructed using MLEs for both $\mu^2$ and $\sigma^2$.
 
 Suppose we are sampling from $N(\mu = 10, \sigma^2=4)$. Define four
 functions that take an input $n$ for the sample size: inside the
@@ -81,8 +81,6 @@ for (i in c(1,2,3,4)){
   print(paste("Variance: ", variance))
   print(paste("Bias: ", bias ))
 }
-
-
 ```
 
 Verify that
@@ -102,10 +100,10 @@ MSE2 <-function(mu,variance,n) {
   MSE <- (4*variance*mu^2)/n + (2*variance^4)/n^2
 }
 MSE3 <-function(mu,variance,n) {
-  MSE <- (4*variance*mu^2)/n + (2*variance^2)/n^2 + (2*variance^2)/(n^2)
+  MSE <- (4*variance*mu^2)/n + (2*variance^2)/n^2 + (2*variance^2)/(n^2*(n-1))
 }
 MSE4 <-function(mu,variance,n) {
-  MSE <- (variance^4/n^2)*(32/n^2 - 20/n + 11) + (4*variance^2*mu^2)/n
+  MSE <- (variance^4/n^2)*(-2/n^2 + 2/n + 3) + (4*variance*mu^2)/n
 }
 ```
 
