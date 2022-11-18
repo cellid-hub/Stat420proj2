@@ -39,10 +39,12 @@ theta2 <-function(n) {
   theta <- theta1(n)- 4/n
 }
 theta3 <-function(n) {
-  theta <- theta1(n)- var(rnorm(n,mean = 10, sd = 2))/n
+  norm_data <- rnorm(n,mean = 10, sd = 2)
+  theta <- mean(norm_data)^2- var(norm_data)/n
 }
 theta4 <-function(n) {
-  theta <- theta1(n)- ( ((n-1)/n)*var(rnorm(n,mean = 10, sd = 2))  )/n
+  norm_data <- rnorm(n,mean = 10, sd = 2)
+  theta <- mean(norm_data)^2 - (((n-1)/n)*var(norm_data))/n
 }
 
 ```
@@ -57,6 +59,7 @@ mean-10)
 
 ```{r}
 empirical_results = list()
+
 #Theta1
 empirical_results <- append(empirical_results, 
                             list(replicate(100000,theta1(8))))
@@ -94,16 +97,16 @@ taking input $\mu$, $\sigma^2$, and $n$.
 
 ```{r}
 MSE1 <-function(mu,variance,n) {
-  MSE <- (4*variance*mu^2)/n + 3*variance/n^2
+  MSE <- (4*variance*mu^2)/n + 3*variance^2/n^2
 }
 MSE2 <-function(mu,variance,n) {
-  MSE <- (4*variance*mu^2)/n + (2*variance^4)/n^2
+  MSE <- (4*variance*mu^2)/n + (2*variance^2)/n^2
 }
 MSE3 <-function(mu,variance,n) {
   MSE <- (4*variance*mu^2)/n + (2*variance^2)/n^2 + (2*variance^2)/(n^2*(n-1))
 }
 MSE4 <-function(mu,variance,n) {
-  MSE <- (variance^4/n^2)*(-2/n^2 + 2/n + 3) + (4*variance*mu^2)/n
+  MSE <- (variance^4/n^2)*(-1/n^2 + 2/n + 2) + (4*variance*mu^2)/n
 }
 ```
 
@@ -112,50 +115,43 @@ $\mu^2 \in [70, 140]$, plot the graphs for the four mean square error
 functions in a single plot. That is plot MSE vs $\mu^2$.
 
 ```{r}
-mse1_plot <- list()
-mse2_plot <- list()
-mse3_plot <- list()
-mse4_plot <- list()
-for (i in list(70:140)){
-  mse1_plot <- append(mse,MSE1(i,4,8))
-  mse2_plot <- append(mse,MSE2(i,4,8))
-  mse3_plot <- append(mse,MSE3(i,4,8))
-  mse4_plot <- append(mse,MSE4(i,4,8))
-}
-mu <- c(70:140)
-qqplot(mu,mse1_plot)
-qqplot(mu,mse2_plot)
-qqplot(mu,mse3_plot)
-qqplot(mu,mse4_plot)
+x <- seq(70, 140, length.out = 1000)
+
+y_1 <- MSE1(mu = sqrt(x), variance = 4, n=8)
+y_2 <- MSE2(mu = sqrt(x), variance = 4, n=8)
+y_3 <- MSE3(mu = sqrt(x), variance = 4, n=8)
+y_4 <- MSE4(mu = sqrt(x), variance = 4, n=8)
+
+plot(x, y_1, type = 'l')
+lines(x,y_2, col ='red' )
+lines(x,y_3, col ='blue' )
+lines(x,y_4, col ='green' )
 ```
 
-For fixed value of $\mu=10$ and $\sigma^2 = 4$, and for different values
-of $n \in \{1, 2, 3, 4, \dots 200\}$, plot the graphs for the four mean
-square error functions in a single plot. That is plot MSE vs $n$ (the
-sample size).
+For fixed value of $\mu=10$ and $\sigma^2 = 4$, and for different va
+lues of $n \in \{1, 2, 3, 4, \dots 200\}$, plot the graphs for the four
+mean square error functions in a single plot. That is plot MSE vs $n$
+(the sample size).
 
 ```{r}
-mse1_plot <- list()
-mse2_plot <- list()
-mse3_plot <- list()
-mse4_plot <- list()
-for (i in list(1:200)){
-  mse1_plot <- append(mse,MSE1(10,4,i))
-  mse2_plot <- append(mse,MSE2(10,4,i))
-  mse3_plot <- append(mse,MSE3(10,4,i))
-  mse4_plot <- append(mse,MSE4(10,4,i))
-}
-n <- c(1:200)
-qqplot(n,mse1_plot)
-qqplot(n,mse2_plot)
-qqplot(n,mse3_plot)
-qqplot(n,mse4_plot)
+x <- seq(1, 200, length.out = 1000)
+
+y_1 <- MSE1(mu = 10, variance = 4, n=x)
+y_2 <- MSE2(mu = 10, variance = 4, n=x)
+y_3 <- MSE3(mu = 10, variance = 4, n=x)
+y_4 <- MSE4(mu = 10, variance = 4, n=x)
+
+plot(x, y_1, type = 'l')
+lines(x,y_2, col ='red' )
+lines(x,y_3, col ='blue' )
+lines(x,y_4, col ='green' )
 ```
 
 What can you conclude?
 
-Based on these plots I can conclude that as the population mean and
-sample size increase the MSE increases.
+Based on these plots, I can conclude that as the population mean
+increases the MSE increases with it linearly, and that as the sample
+size increases the MSE decreases as a function of a power of 1/n.
 
 ## Fisher Information, Efficiency, Asymptotic Calculations
 
