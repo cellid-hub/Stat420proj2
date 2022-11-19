@@ -159,6 +159,9 @@ For a given value of $\mu$ write the function that calculates the Fisher
 Information $I(\mu^2)$ (this was calculated in the HW).
 
 ```{r}
+fisher_mu_squared <- function(mu, variance){
+  return(1/(4*mu^2*variance^2))
+}
 
 ```
 
@@ -167,7 +170,7 @@ verify that the asymptotic distribution of
 $$\sqrt{n}(\hat{\theta} - \mu^2) \longrightarrow N(0, \frac{1}{I(\mu^2)})$$.
 
 ```{r}
-
+#TODO
 ```
 
 An unbiased estimator for $\mu^2$ is
@@ -176,7 +179,9 @@ that takes input $\mu, \sigma^2, n$ and outputs the efficiency of
 $\hat{\theta}_{u}$.
 
 ```{r}
-
+efficiency <- function(mu, variance, n){
+  return((2*n*mu^2)/(2*n*mu^2 + variance))
+}
 ```
 
 For fixed value of $n=8$ and $\sigma^2 = 4$, and for different values of
@@ -184,7 +189,15 @@ $\mu^2 \in [70, 140]$, plot the graph of the efficiency of
 $\hat{\theta}_\text{u}$. Thats is plot effiency vs $\mu^2$.
 
 ```{r}
-
+n = 8
+variance = 4
+mu_squared = seq(70, 140, length.out = 1000)
+effs = vector()
+for (mu in mu_squared){
+  effs <- append(effs, efficiency(sqrt(mu), variance, n))
+}
+plot(mu_squared, effs, type='l')
+  
 ```
 
 For fixed value of $\mu=10$ and $\sigma^2 = 4$, and for different values
