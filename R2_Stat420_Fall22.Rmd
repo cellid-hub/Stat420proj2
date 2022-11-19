@@ -191,12 +191,12 @@ $\hat{\theta}_\text{u}$. Thats is plot effiency vs $\mu^2$.
 ```{r}
 n = 8
 variance = 4
-mu_squared = seq(70, 140, length.out = 1000)
+mus_squared = seq(70, 140, length.out = 1000)
 effs = vector()
-for (mu in mu_squared){
-  effs <- append(effs, efficiency(sqrt(mu), variance, n))
+for (mu_squared in mus_squared){
+  effs <- append(effs, efficiency(sqrt(mu_squared), variance, n))
 }
-plot(mu_squared, effs, type='l')
+plot(mus_squared, effs, type='l')
   
 ```
 
@@ -206,7 +206,15 @@ of $\hat{\theta}_\text{u}$. Thats is plot efficiency vs $n$ (the sample
 size).
 
 ```{r}
-
+mu = 10
+variance = 4
+effs = vector()
+ns = seq(1,200)
+for (n in ns){
+  effs <- append(effs, efficiency(mu, variance, n))
+}
+plot(ns, effs, type='l')
+ 
 ```
 
 # Population Distribution: $N(\mu, \sigma^2)$ and $\theta = \sigma^2$
