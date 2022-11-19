@@ -162,7 +162,6 @@ Information $I(\mu^2)$ (this was calculated in the HW).
 fisher_mu_squared <- function(mu, variance){
   return(1/(4*mu^2*variance^2))
 }
-
 ```
 
 The MLE for $\mu^2$ is $\hat{\theta} = \overline{X}^2$. Empirically
@@ -170,7 +169,16 @@ verify that the asymptotic distribution of
 $$\sqrt{n}(\hat{\theta} - \mu^2) \longrightarrow N(0, \frac{1}{I(\mu^2)})$$.
 
 ```{r}
-#TODO
+ns <- c(10,100,1000,10000)
+mu = 0
+sd = 1
+for (n in ns){
+  samples <- replicate(1000,sqrt(n)*(mean(rnorm(n, mean=mu, sd=sd))^2))
+  hist(samples, freq=FALSE, main=list(paste("n=",n," : Normal(",round(mean(samples)),",",round(sd(samples)),")")))
+  xfit <- seq(min(samples), max(samples), length = 40) 
+  yfit <- dnorm(xfit, mean = mean(samples), sd = sd(samples))
+  lines(xfit, yfit, col = "black", lwd = 2)
+}
 ```
 
 An unbiased estimator for $\mu^2$ is
