@@ -169,15 +169,19 @@ verify that the asymptotic distribution of
 $$\sqrt{n}(\hat{\theta} - \mu^2) \longrightarrow N(0, \frac{1}{I(\mu^2)})$$.
 
 ```{r}
-ns <- c(10,100,1000,10000)
-mu = 0
+ns <- c(10,100,1000,10000, 50000)
+mu = 1
 sd = 1
+options(scipen=999) # for non-scientific notation
+# sqrt(n)(xBar^2 - mu^2) -> N(0, 1/I(mu^2)) = N(0, 1/(1/4*sigma^2*mu^2)) = N(0, 4) is limiting dist
 for (n in ns){
-  samples <- replicate(1000,sqrt(n)*(mean(rnorm(n, mean=mu, sd=sd))^2))
-  hist(samples, freq=FALSE, main=list(paste("n=",n," : Normal(",round(mean(samples)),",",round(sd(samples)),")")))
-  xfit <- seq(min(samples), max(samples), length = 40) 
-  yfit <- dnorm(xfit, mean = mean(samples), sd = sd(samples))
-  lines(xfit, yfit, col = "black", lwd = 2)
+  theta <- replicate(5000,mean(rnorm(n, mean=mu, sd=sd))^2)
+  hist(sqrt(n)*(theta-mu^2), freq=FALSE, main=list(paste("n=",n," : N(",round(mean(sqrt(n)*(theta - mu^2)), 5),",",round(var(sqrt(n)*(theta - mu^2)), 5),"), expected: N(", 0,",",4,")")))
+  x <- seq(min(sqrt(n)*(theta-mu^2)), max(sqrt(n)*(theta-mu^2)), length = 100) 
+  y <- dnorm(x, mean = 0, sd = 2)
+  lines(x, y, col = "red", lwd = 2)
+
+  
 }
 ```
 
