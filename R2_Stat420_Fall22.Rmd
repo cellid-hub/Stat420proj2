@@ -4,6 +4,7 @@ author: "Nathan Poteet, Dylan Celli, Matthew Foulk"
 output:
   pdf_document:
     toc: yes
+    fig_crop: no
   html_document:
     number_sections: yes    
     toc: yes
@@ -173,10 +174,17 @@ ns <- c(10,100,1000,10000, 50000)
 mu = 1
 sd = 1
 options(scipen=999) # for non-scientific notation
-# sqrt(n)(xBar^2 - mu^2) -> N(0, 1/I(mu^2)) = N(0, 1/(1/4*sigma^2*mu^2)) = N(0, 4) is limiting dist
+# sqrt(n)(xBar^2 - mu^2) -> N(0, 1/I(mu^2)) = N(0, 1/(1/4*sigma^2*mu^2)) 
+#  = N(0, 4) is limiting dist
+
+# Create the layout
+
 for (n in ns){
   theta <- replicate(5000,mean(rnorm(n, mean=mu, sd=sd))^2)
-  hist(sqrt(n)*(theta-mu^2), freq=FALSE, main=list(paste("n=",n," : N(",round(mean(sqrt(n)*(theta - mu^2)), 5),",",round(var(sqrt(n)*(theta - mu^2)), 5),"), expected: N(", 0,",",4,")")))
+  hist(sqrt(n)*(theta-mu^2), freq=FALSE, 
+       main=list(paste("n=",n," : N(",round(mean(sqrt(n)*(theta - mu^2)), 5),
+                       ",",round(var(sqrt(n)*(theta - mu^2)), 5),
+                       "), expected: N(", 0,",",4,")")))
   x <- seq(min(sqrt(n)*(theta-mu^2)), max(sqrt(n)*(theta-mu^2)), length = 100) 
   y <- dnorm(x, mean = 0, sd = 2)
   lines(x, y, col = "red", lwd = 2)
@@ -198,7 +206,7 @@ efficiency <- function(mu, variance, n){
 
 For fixed value of $n=8$ and $\sigma^2 = 4$, and for different values of
 $\mu^2 \in [70, 140]$, plot the graph of the efficiency of
-$\hat{\theta}_\text{u}$. Thats is plot effiency vs $\mu^2$.
+$\hat{\theta}_\text{u}$. Thats is plot efficiency vs $\mu^2$.
 
 ```{r}
 n = 8
@@ -270,10 +278,12 @@ for (i in 0:50){
   y3 <- append(y3, mse)
 }
 
-plot(x1,y1,ylim=range(c(y1,y2,y3)),xlim=range(c(x1,x2,x3)), type="l",col="red",xlab="sigma^2",ylab="MSE")
+plot(x1,y1,ylim=range(c(y1,y2,y3)),xlim=range(c(x1,x2,x3)), type="l",col="red",
+     xlab="sigma^2",ylab="MSE")
 lines(x2,y2,col="green")
 lines(x3,y3,col="blue")
-legend(x='topleft',legend=c("theta_1", "theta_2", "theta_3"), col=c("red","green","blue"), lty=1)
+legend(x='topleft',legend=c("theta_1", "theta_2", "theta_3"), 
+       col=c("red","green","blue"), lty=1)
 
 
 
@@ -316,9 +326,11 @@ for (i in 2:200){
   y3 <- append(y3, mse)
 }
 
-plot(x1,y1,ylim=range(c(y1,y2,y3)),xlim=range(c(x1,x2,x3)), lwd=1.2,type="l",col="red",xlab="n",ylab="MSE")
+plot(x1,y1,ylim=range(c(y1,y2,y3)),xlim=range(c(x1,x2,x3)), 
+     lwd=1.2,type="l",col="red",xlab="n",ylab="MSE")
 lines(x2,y2,col="green")
 lines(x3,y3,col="blue")
-legend(x='topright',legend=c("theta_1", "theta_2", "theta_3"), col=c("red","green","blue"), lty=1)
+legend(x='topright',legend=c("theta_1", "theta_2", "theta_3"), 
+       col=c("red","green","blue"), lty=1)
 
 ```
